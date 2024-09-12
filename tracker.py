@@ -12,7 +12,6 @@ df_energy_produced = pd.read_csv("energy_produced.csv", sep=";", encoding='ISO-8
 kgCO2_AR_Tokyo_Paris = 1.457e3 * 2     # Source : impact CO2 transport
 
 
-print(df_energy_produced)
 
 
 
