@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 gCO2_per_kwh_nuclear = 3.7 # Source : Le Monde
 gCO2_per_GWH_nuclear = gCO2_per_kwh_nuclear * 1e6
-df_energy_produced = pd.read_csv("energy_produced.csv", sep=";", encoding='ISO-8859-1')
+df_energy_produced = pd.read_csv("energy_produced.csv", sep=";", encoding='ISO-8859-1')  # Source : EDF
 kgCO2_AR_Tokyo_Paris = 1.457e3     # Source : alterna énergie
 
 
