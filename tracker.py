@@ -36,7 +36,7 @@ produced_energy_hydraulic = np.int32(hydraulic_array[:,7])
 # plt.ylabel("Energy production [GWh]")
 # plt.show()
 
-
+print(np.int32(np.max(produced_energy_nuclear)/kgCO2_AR_Tokyo_Paris*1e3))
 
 plt.figure("Nuclear production vs years")
 plt.plot(years_nuclear, produced_energy_nuclear)
@@ -62,8 +62,3 @@ plt.plot(years_hydraulic,gCO2_per_GWH_hydraulic*produced_energy_hydraulic )
 plt.xlabel("Year")
 plt.ylabel("C02 of nuclear energy production")
 plt.show()
-
-
-
-print("pipi")
-
