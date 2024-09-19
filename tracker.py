@@ -8,6 +8,11 @@ gCO2_per_GWH_nuclear = gCO2_per_kwh_nuclear * 1e6
 gCO2_per_GWH_hydraulic = gCO2_per_kwh_hydraulic * 1e6
 
 
+
+gCO2_per_kwH_thermical = 500   # Source : climate.selectra.com      # A modif faire approx 
+gCO2_per_GWH_thermical = gCO2_per_kwH_thermical * 1e6
+
+
 df_energy_produced = pd.read_csv("energy_produced.csv", sep=";", encoding='ISO-8859-1')  # Source : EDF
 kgCO2_AR_Tokyo_Paris = 1.457e3 * 2     # Source : impact CO2 transport
 
@@ -27,8 +32,14 @@ thermical_array = array_energy_produced[array_energy_produced[:,6]=="Flame therm
 years_thermical = np.int16(thermical_array[:,0])
 produced_energy_thermical = np.int32(thermical_array[:,7])
 
-plt.figure("Various energy production vs years")
 
+
+
+print("Equivalent CO2 en nombre d'aller retour Paris - Tokyo pour une production maximale annuelle via le nucléaire : ",  np.int64((np.max(produced_energy_nuclear)*gCO2_per_GWH_nuclear)/(kgCO2_AR_Tokyo_Paris*1e3)))
+print("Equivalent CO2 en nombre d'aller retour Paris - Tokyo pour une même production annuelle mais via le thermique : ", np.int64((np.max(produced_energy_nuclear)*gCO2_per_GWH_thermical)/(kgCO2_AR_Tokyo_Paris*1e3)))
+
+
+plt.figure("Various energy production vs years")
 plt.plot(years_nuclear, produced_energy_nuclear, marker='x', label = " nuclear")
 plt.plot(years_hydraulic, produced_energy_hydraulic, marker='x', label = "hydraulic")
 plt.plot(years_thermical ,produced_energy_thermical,marker ='x', label = "thermical")
@@ -36,15 +47,6 @@ plt.xlabel("Year")
 plt.ylabel("Energy production [GWh]")
 plt.legend()
 plt.show()
-
-
- 
-
-print("Equivalent CO2 en nombre d'aller retour Paris - Tokyo pour une production maximale annuelle via le nucléaire : ",np.int32(np.max(produced_energy_nuclear)/kgCO2_AR_Tokyo_Paris*1e3))
-print("Equivalent CO2 en nombre d'aller retour Paris - Tokyo pour une même production annuelle mais via le nucléaire : ",np.int32(np.max(produced_energy_nuclear)/kgCO2_AR_Tokyo_Paris*1e3))
-
-
-
 
 
 plt.figure("Nuclear production vs years")
