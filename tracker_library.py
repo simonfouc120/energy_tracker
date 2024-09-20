@@ -23,7 +23,7 @@ def load_data(file) :
 
 
 
-def load_array(file): 
+def load_array(file): ### A MODIF
     if file == "various_energy_produced" : 
         df_energy_produced = load_data("various_energy_produced")
         
@@ -41,3 +41,24 @@ def load_array(file):
         years_thermical = np.int16(thermical_array[:,0])
         produced_energy_thermical = np.int32(thermical_array[:,7])
         return years_nuclear, produced_energy_nuclear, years_hydraulic, produced_energy_hydraulic, years_thermical, produced_energy_thermical
+
+
+def plot(years_nuclear, produced_energy_nuclear, years_hydraulic, produced_energy_hydraulic, years_thermical, produced_energy_thermical):
+    plt.figure("Various energy production vs years")
+    plt.plot(years_nuclear, produced_energy_nuclear, marker='x', label = " nuclear")
+    plt.plot(years_hydraulic, produced_energy_hydraulic, marker='x', label = "hydraulic")
+    plt.plot(years_thermical ,produced_energy_thermical,marker ='x', label = "thermical")
+    plt.xlabel("Year")
+    plt.ylabel("Energy production [GWh]")
+    plt.legend()
+    plt.show()
+
+    plt.figure("Various energy CO2 vs years")
+    plt.plot(years_nuclear, produced_energy_nuclear*GCO2_PER_GWH_NUCLEAR, marker='x', label = " nuclear")
+    plt.plot(years_hydraulic, produced_energy_hydraulic*GCO2_PER_GWH_HYDRAULIC, marker='x', label = "hydraulic")
+    plt.plot(years_thermical ,produced_energy_thermical*GCO2_PER_GWH_THERMICAL,marker ='x', label = "thermical")
+    plt.xlabel("Year")
+    plt.ylabel("gCO2 eq")
+    plt.legend()
+    plt.show()
+
