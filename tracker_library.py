@@ -2,6 +2,20 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
+
+GCO2_PER_KWH_NUCLEAR = 3.7 # Source : Le Monde, EDF
+GCO2_PER_KWH_HYDRAULIC = 6.0 # Source : alterna énergie
+GCO2_PER_GWH_NUCLEAR = GCO2_PER_KWH_NUCLEAR * 1e6
+GCO2_PER_GWH_HYDRAULIC = GCO2_PER_KWH_HYDRAULIC * 1e6
+
+GCO2_PER_KWH_THERMICAL = 500   # Source : climate.selectra.com      # A modif faire meilleure approx 
+GCO2_PER_GWH_THERMICAL = GCO2_PER_KWH_THERMICAL * 1e6
+
+KGCO2_AR_TOKYO_PARIS = 1.457e3 * 2     # Source : impact CO2 transport
+GCO2_PER_PERSON_YR = 8,9e6  # Source : statistique.developpement-durable.gouv.fr
+
+
+
 def load_data(file) : 
     if file == "various_energy_produced" : 
         df_energy_produced = pd.read_csv("energy_produced.csv", sep=";", encoding='ISO-8859-1')  # Source : EDF
