@@ -1,7 +1,10 @@
-##
-## September 2024
-## Simon Foucambert - simon.fcbrt@gmail.fr
-##
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+"""
+   September 2024
+   Simon Foucambert - simon.fcbrt@gmail.fr
+"""
 
 from tracker_library import*
 
