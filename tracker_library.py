@@ -67,10 +67,17 @@ def load_array(file): ### A MODIF
         
         return sorted_city_centrale, sorted_combustible, sorted_installed_power
 
-def centrale_rank(city_centrale, combustible, installed_power) :
-    print("Classement des centrales par puissance installée :")
+
+def centrale_rank(city_centrale, combustible, installed_power):
+    max_city_len = max(len(city) for city in city_centrale) + 2  # Ajouter un peu d'espace pour l'esthétique
+    max_comb_len = max(len(comb) for comb in combustible) + 2
+    max_power_len = len(str(max(installed_power))) + 2
+    print(f"{'Rang':<5}{'Centrale':<{max_city_len}}{'Combustible utilisé':<{max_comb_len}}{'Puissance installée (MW)':<{max_power_len}}")
+    print("-" * (5 + max_city_len + max_comb_len + max_power_len))  # Séparateur
     for i, (city, comb, power) in enumerate(zip(city_centrale, combustible, installed_power), 1):
-        print(f"{i}. Centrale: {city}, Combustible utilisé : {comb}, Puissance installée: {power} MW")
+        print(f"{i:<5}{city:<{max_city_len}}{comb:<{max_comb_len}}{power:<{max_power_len}} MW")
+
+
 
 def plot(years_nuclear, produced_energy_nuclear, years_hydraulic, produced_energy_hydraulic, years_thermical, produced_energy_thermical):
     plt.figure("Various energy production vs years")
