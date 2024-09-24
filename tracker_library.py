@@ -19,7 +19,11 @@ GCO2_PER_PERSON_YR = 8,9e6  # Source : statistique.developpement-durable.gouv.fr
 def load_data(file) : 
     if file == "various_energy_produced" : 
         df_energy_produced = pd.read_csv("energy_produced.csv", sep=";", encoding='ISO-8859-1')  # Source : EDF
-    return df_energy_produced
+        return df_energy_produced
+
+    if file == "centrale_nuclear" :
+        df_nuclear_centrales = pd.read_csv("centrales-de-production-nucleaire-edf.csv", sep=";", encoding='ISO-8859-1')  # Source : EDF
+        return df_nuclear_centrales
 
 
 
@@ -41,6 +45,10 @@ def load_array(file): ### A MODIF
         years_thermical = np.int16(thermical_array[:,0])
         produced_energy_thermical = np.int32(thermical_array[:,7])
         return years_nuclear, produced_energy_nuclear, years_hydraulic, produced_energy_hydraulic, years_thermical, produced_energy_thermical
+    if file == "centrale_nuclear" : 
+        df_nuclear_centrales = load_data("centrale_nuclear")
+        array_nuclear_centrale = np.array(df_nuclear_centrales)
+        city_centrale = array_nuclear_centrale[6,1:]
 
 
 def plot(years_nuclear, produced_energy_nuclear, years_hydraulic, produced_energy_hydraulic, years_thermical, produced_energy_thermical):
