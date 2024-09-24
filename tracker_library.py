@@ -48,7 +48,19 @@ def load_array(file): ### A MODIF
     if file == "centrale_nuclear" : 
         df_nuclear_centrales = load_data("centrale_nuclear")
         array_nuclear_centrale = np.array(df_nuclear_centrales)
-        city_centrale = array_nuclear_centrale[6,1:]
+        city_centrale = array_nuclear_centrale[1:,6]
+        installed_power = array_nuclear_centrale[1:,14]
+        unique_pairs = list(set(zip(city_centrale, installed_power)))
+        city_centrale, installed_power = zip(*unique_pairs)
+        city_centrale = np.array(city_centrale)
+        installed_power = np.array(installed_power)
+        
+
+        sorted_city_centrale = city_centrale[np.argsort(-installed_power)]
+        sorted_installed_power = installed_power[np.argsort(-installed_power)]
+        
+
+        return sorted_city_centrale, sorted_installed_power
 
 
 def plot(years_nuclear, produced_energy_nuclear, years_hydraulic, produced_energy_hydraulic, years_thermical, produced_energy_thermical):

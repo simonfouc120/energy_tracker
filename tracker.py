@@ -11,6 +11,9 @@ from tracker_library import*
 
 years_nuclear, produced_energy_nuclear, years_hydraulic, produced_energy_hydraulic, years_thermical, produced_energy_thermical = load_array("various_energy_produced")
 
+load_array("centrale_nuclear")
+
+
 # plot(years_nuclear, produced_energy_nuclear, years_hydraulic, produced_energy_hydraulic, years_thermical, produced_energy_thermical)
 
 # calcul_equ_co2(produced_energy_nuclear)
