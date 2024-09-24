@@ -54,14 +54,17 @@ def load_array(file): ### A MODIF
         city_centrale, installed_power = zip(*unique_pairs)
         city_centrale = np.array(city_centrale)
         installed_power = np.array(installed_power)
-        
-
         sorted_city_centrale = city_centrale[np.argsort(-installed_power)]
         sorted_installed_power = installed_power[np.argsort(-installed_power)]
         
-
+        ### Ajout combustible
+        
         return sorted_city_centrale, sorted_installed_power
 
+def centrale_rank(city_centrale, installed_power) :
+    print("Classement des centrales par puissance installée :")
+    for city, power in zip(city_centrale, installed_power):
+        print(f"Centrale: {city}, Puissance installée: {power} MW")
 
 def plot(years_nuclear, produced_energy_nuclear, years_hydraulic, produced_energy_hydraulic, years_thermical, produced_energy_thermical):
     plt.figure("Various energy production vs years")
