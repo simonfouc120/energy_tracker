@@ -13,7 +13,6 @@ years_nuclear, produced_energy_nuclear, years_hydraulic, produced_energy_hydraul
 
 city_centrale, installed_power = load_array("centrale_nuclear")
 
-
 centrale_rank(city_centrale, installed_power) 
 
 # plot(years_nuclear, produced_energy_nuclear, years_hydraulic, produced_energy_hydraulic, years_thermical, produced_energy_thermical)

@@ -63,8 +63,8 @@ def load_array(file): ### A MODIF
 
 def centrale_rank(city_centrale, installed_power) :
     print("Classement des centrales par puissance installée :")
-    for city, power in zip(city_centrale, installed_power):
-        print(f"Centrale: {city}, Puissance installée: {power} MW")
+    for i, (city, power) in enumerate(zip(city_centrale, installed_power), 1):
+        print(f"{i}. Centrale: {city}, Puissance installée: {power} MW")
 
 def plot(years_nuclear, produced_energy_nuclear, years_hydraulic, produced_energy_hydraulic, years_thermical, produced_energy_thermical):
     plt.figure("Various energy production vs years")
