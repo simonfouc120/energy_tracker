@@ -2,7 +2,6 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-
 GCO2_PER_KWH_NUCLEAR = 3.7 # Source : Le Monde, EDF
 GCO2_PER_KWH_HYDRAULIC = 6.0 # Source : alterna énergie
 GCO2_PER_GWH_NUCLEAR = GCO2_PER_KWH_NUCLEAR * 1e6
@@ -14,7 +13,6 @@ GCO2_PER_GWH_THERMICAL = GCO2_PER_KWH_THERMICAL * 1e6
 KGCO2_AR_TOKYO_PARIS = 1.457e3 * 2     # Source : impact CO2 transport
 GCO2_PER_PERSON_YR = 8,9e6  # Source : statistique.developpement-durable.gouv.fr
 
-
 def load_data(file) : 
     if file == "various_energy_produced" : 
         df_energy_produced = pd.read_csv("energy_produced.csv", sep=";", encoding='ISO-8859-1')  # Source : EDF
@@ -24,9 +22,9 @@ def load_data(file) :
         df_nuclear_centrales = pd.read_csv("centrales-de-production-nucleaire-edf.csv", sep=";", encoding='ISO-8859-1')  # Source : EDF
         return df_nuclear_centrales
 
-
 def load_array(file): ### A MODIF
     if file == "various_energy_produced" : 
+        
         df_energy_produced = load_data("various_energy_produced")
         
         array_energy_produced = np.array(df_energy_produced)
@@ -42,28 +40,37 @@ def load_array(file): ### A MODIF
         thermical_array = array_energy_produced[array_energy_produced[:,6]=="Flame thermal"]
         years_thermical = np.int16(thermical_array[:,0])
         produced_energy_thermical = np.int32(thermical_array[:,7])
+        
         return years_nuclear, produced_energy_nuclear, years_hydraulic, produced_energy_hydraulic, years_thermical, produced_energy_thermical
     
     if file == "centrale_nuclear" : 
         df_nuclear_centrales = load_data("centrale_nuclear")
         array_nuclear_centrale = np.array(df_nuclear_centrales)
         city_centrale = array_nuclear_centrale[1:,6]
+        combustible = array_nuclear_centrale[1:,8]
+
         installed_power = array_nuclear_centrale[1:,14]
-        unique_pairs = list(set(zip(city_centrale, installed_power)))
-        city_centrale, installed_power = zip(*unique_pairs)
+        unique_pairs = list(set(zip(city_centrale, combustible, installed_power)))
+        
+        city_centrale, combustible, installed_power = zip(*unique_pairs)
         city_centrale = np.array(city_centrale)
+        combustible = np.array(combustible)
+        
+        
         installed_power = np.array(installed_power)
+        
         sorted_city_centrale = city_centrale[np.argsort(-installed_power)]
+        sorted_combustible = combustible[np.argsort(-installed_power)]
         sorted_installed_power = installed_power[np.argsort(-installed_power)]
         
         ### Ajout combustible
         
-        return sorted_city_centrale, sorted_installed_power
+        return sorted_city_centrale, sorted_combustible, sorted_installed_power
 
-def centrale_rank(city_centrale, installed_power) :
+def centrale_rank(city_centrale, combustible, installed_power) :
     print("Classement des centrales par puissance installée :")
-    for i, (city, power) in enumerate(zip(city_centrale, installed_power), 1):
-        print(f"{i}. Centrale: {city}, Puissance installée: {power} MW")
+    for i, (city, comb, power) in enumerate(zip(city_centrale, combustible, installed_power), 1):
+        print(f"{i}. Centrale: {city}, Combustible utilisé : {comb}, Puissance installée: {power} MW")
 
 def plot(years_nuclear, produced_energy_nuclear, years_hydraulic, produced_energy_hydraulic, years_thermical, produced_energy_thermical):
     plt.figure("Various energy production vs years")
@@ -84,7 +91,6 @@ def plot(years_nuclear, produced_energy_nuclear, years_hydraulic, produced_energ
     plt.legend()
     plt.show()
 
-
 def calcul_equ_co2(produced_energy_nuclear) :
     print("Equivalent CO2 en nombre d'aller retour Paris - Tokyo pour une production maximale annuelle via le nucléaire : ",  np.int64((np.max(produced_energy_nuclear)*GCO2_PER_GWH_NUCLEAR)/(KGCO2_AR_TOKYO_PARIS*1e3)))
     print("Equivalent CO2 en nombre d'aller retour Paris - Tokyo pour une même production annuelle mais via le thermique : ", np.int64((np.max(produced_energy_nuclear)*GCO2_PER_GWH_THERMICAL)/(KGCO2_AR_TOKYO_PARIS*1e3)))
@@ -95,7 +101,6 @@ def calcul_equ_co2(produced_energy_nuclear) :
 # plt.xlabel("Year")
 # plt.ylabel("Energy production [GWh]")
 # plt.show()
-
 
 # plt.figure("Date vs gCO2 for nuclear")
 # plt.plot(years_nuclear,gCO2_per_GWH_nuclear*produced_energy_nuclear)
