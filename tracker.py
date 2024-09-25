@@ -17,6 +17,8 @@ if __name__ == "__main__":
 
    proportion_combustible(combustible, installed_power)
    # plot_energy_production_and_co2(years_nuclear, produced_energy_nuclear, years_hydraulic, produced_energy_hydraulic, years_thermical, produced_energy_thermical)
-   load_array("energy_consumption")
+   years_consumption, energy_consumption, gaz_consumption = load_array("energy_consumption")
+   
+   plot_energy_consumption(years_consumption, energy_consumption, gaz_consumption)
    # calcul_equ_co2(produced_energy_nuclear)
 

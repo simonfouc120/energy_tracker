@@ -89,6 +89,14 @@ def load_array(file): ### A MODIF
         years_cunsomption = array_energy_consumption[1:,0]
         energy_consumption = array_energy_consumption[1:,6]
         gaz_consumption = array_energy_consumption[1:,5]
+   
+        sorted_indices = np.argsort(years_cunsomption)
+        years_cunsomption = years_cunsomption[sorted_indices]
+        energy_consumption = energy_consumption[sorted_indices]
+        gaz_consumption = gaz_consumption[sorted_indices]
+        
+        
+        
         return years_cunsomption, energy_consumption, gaz_consumption
 
 
@@ -134,6 +142,21 @@ def plot_energy_production_and_co2(years_nuclear, produced_energy_nuclear, years
 
     plt.tight_layout()
     plt.show()
+
+def plot_energy_consumption(years_consumption, energy_consumption, gaz_consumption):
+    fig, ax1 = plt.subplots(1, 1, figsize=(10, 5))
+
+    ax1.plot(years_consumption, energy_consumption, marker='x', label="Energy Consumption")
+    ax1.plot(years_consumption, gaz_consumption, marker='x', label="Gaz Consumption")
+    ax1.set_xlabel("Year")
+    ax1.set_ylabel("Energy consumption [GWh]")
+    ax1.set_title("Energy Consumption Over Years")
+    ax1.grid(True)
+    ax1.legend()
+
+    plt.tight_layout()
+    plt.show()
+
 
 def calcul_equ_co2(produced_energy_nuclear) :
     print("Equivalent CO2 en nombre d'aller retour Paris - Tokyo pour une production maximale annuelle via le nucléaire : ",  np.int64((np.max(produced_energy_nuclear)*GCO2_PER_GWH_NUCLEAR)/(KGCO2_AR_TOKYO_PARIS*1e3)))
