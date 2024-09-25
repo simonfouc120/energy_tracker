@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 BLUE = '\033[94m'
 GREEN = '\033[92m'
 RED = '\033[91m'
+VIOLET = '\033[95m'
 RESET = '\033[0m'
 
 # Constant
@@ -47,7 +48,14 @@ def load_array(file): ### A MODIF
         thermical_array = array_energy_produced[array_energy_produced[:,6]=="Flame thermal"]
         years_thermical = np.int16(thermical_array[:,0])
         produced_energy_thermical = np.int32(thermical_array[:,7])
-        
+        # ajout de 0 à nuclear_array pour les années où il n'y a pas de production
+        all_years = np.arange(np.min(years_thermical), np.max(years_hydraulic) + 1)
+        missing_years = np.setdiff1d(all_years, years_nuclear)
+        years_nuclear = np.append(years_nuclear, missing_years)
+        produced_energy_nuclear = np.append(produced_energy_nuclear, np.zeros(len(missing_years)))
+        sorted_indices = np.argsort(years_nuclear)
+        years_nuclear = years_nuclear[sorted_indices]
+        produced_energy_nuclear = produced_energy_nuclear[sorted_indices]
         return years_nuclear, produced_energy_nuclear, years_hydraulic, produced_energy_hydraulic, years_thermical, produced_energy_thermical
     
     if file == "centrale_nuclear" : 
@@ -89,22 +97,31 @@ def centrale_rank(city_centrale, combustible, installed_power):
         print(f"{RESET}{i:<5}{color}{city:<{max_city_len}}{comb:<{max_comb_len}}{power:<{max_power_len}} MW")
 
 def plot_energy_production_and_co2(years_nuclear, produced_energy_nuclear, years_hydraulic, produced_energy_hydraulic, years_thermical, produced_energy_thermical):
-    plt.figure("Various energy production vs years")
-    plt.plot(years_nuclear, produced_energy_nuclear, marker='x', label = " nuclear")
-    plt.plot(years_hydraulic, produced_energy_hydraulic, marker='x', label = "hydraulic")
-    plt.plot(years_thermical, produced_energy_thermical, marker ='x', label = "thermical")
-    plt.xlabel("Year")
-    plt.ylabel("Energy production [GWh]")
-    plt.legend()
-    plt.show()
+    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 10))
 
-    plt.figure("Various energy CO2 vs years")
-    plt.plot(years_nuclear, produced_energy_nuclear*GCO2_PER_GWH_NUCLEAR, marker='x', label = " nuclear")
-    plt.plot(years_hydraulic, produced_energy_hydraulic*GCO2_PER_GWH_HYDRAULIC, marker='x', label = "hydraulic")
-    plt.plot(years_thermical ,produced_energy_thermical*GCO2_PER_GWH_THERMICAL, marker ='x', label = "thermical")
-    plt.xlabel("Year")
-    plt.ylabel("gCO2 eq")
-    plt.legend()
+    ax1.plot(years_nuclear, produced_energy_nuclear, marker='x', label="Nuclear")
+    ax1.plot(years_hydraulic, produced_energy_hydraulic, marker='x', label="Hydraulic")
+    ax1.plot(years_thermical, produced_energy_thermical, marker='x', label="Thermical")
+    
+    total_energy_produced = produced_energy_nuclear + produced_energy_hydraulic + produced_energy_thermical
+    ax1.plot(years_nuclear, total_energy_produced, marker='+', linestyle='-', label="Total Energy", color='black')
+    
+    ax1.set_xlabel("Year")
+    ax1.set_ylabel("Energy production [GWh]")
+    ax1.set_title("Energy Production Over Years")
+    ax1.grid(True)
+    ax1.legend()
+
+    ax2.plot(years_nuclear, produced_energy_nuclear * GCO2_PER_GWH_NUCLEAR, marker='x', label="Nuclear")
+    ax2.plot(years_hydraulic, produced_energy_hydraulic * GCO2_PER_GWH_HYDRAULIC, marker='x', label="Hydraulic")
+    ax2.plot(years_thermical, produced_energy_thermical * GCO2_PER_GWH_THERMICAL, marker='x', label="Thermical")
+    ax2.set_xlabel("Year")
+    ax2.set_ylabel("gCO2 eq")
+    ax2.set_title("CO2 Emissions Over Years")
+    ax2.grid(True)
+    ax2.legend()
+
+    plt.tight_layout()
     plt.show()
 
 def calcul_equ_co2(produced_energy_nuclear) :
