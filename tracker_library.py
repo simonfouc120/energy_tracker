@@ -111,3 +111,12 @@ def calcul_equ_co2(produced_energy_nuclear) :
     print("Equivalent CO2 en nombre d'aller retour Paris - Tokyo pour une même production annuelle mais via le thermique : ", np.int64((np.max(produced_energy_nuclear)*GCO2_PER_GWH_THERMICAL)/(KGCO2_AR_TOKYO_PARIS*1e3)))
 
 
+# Proportion combustible
+def proportion_combustible(combustible, installed_power):
+    total_power = np.sum(installed_power)
+    prop_235U = np.sum(installed_power[combustible == "235U"]) / total_power
+    prop_MOX = np.sum(installed_power[combustible == "MOX"]) / total_power
+    print(f"Proportion de la puissance installée en 235U : {prop_235U:.2%}")
+    print(f"Proportion de la puissance installée en MOX : {prop_MOX:.2%}")
+    
+    
