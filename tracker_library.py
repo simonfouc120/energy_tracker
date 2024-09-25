@@ -2,6 +2,15 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
+
+# Codes couleurs ANSI
+BLUE = '\033[94m'
+GREEN = '\033[92m'
+RESET = '\033[0m'
+
+
+
+# Constant
 GCO2_PER_KWH_NUCLEAR = 3.7 # Source : Le Monde, EDF
 GCO2_PER_KWH_HYDRAULIC = 6.0 # Source : alterna énergie
 GCO2_PER_GWH_NUCLEAR = GCO2_PER_KWH_NUCLEAR * 1e6
@@ -56,7 +65,6 @@ def load_array(file): ### A MODIF
         city_centrale = np.array(city_centrale)
         combustible = np.array(combustible)
         combustible[combustible=='Multi-oxyde dâ\x80\x99uranium et de plutonium'] = "MOX"
-        
         installed_power = np.array(installed_power)
         
         sorted_city_centrale = city_centrale[np.argsort(-installed_power)]
@@ -65,14 +73,31 @@ def load_array(file): ### A MODIF
         ### Ajout combustible
         return sorted_city_centrale, sorted_combustible, sorted_installed_power
 
+# def centrale_rank(city_centrale, combustible, installed_power):
+#     max_city_len = max(len(city) for city in city_centrale) + 2  
+#     max_comb_len = max(len(comb) for comb in combustible) + 2
+#     max_power_len = len(str(max(installed_power))) + 2
+#     print(f"{'Rang':<5}{'Centrale':<{max_city_len}}{'Combustible utilisé':<{max_comb_len}}{'Puissance installée (MW)':<{max_power_len}}")
+#     print("-" * (5 + max_city_len + max_comb_len + max_power_len))  
+#     for i, (city, comb, power) in enumerate(zip(city_centrale, combustible, installed_power), 1):
+#         print(f"{i:<5}{city:<{max_city_len}}{comb:<{max_comb_len}}{power:<{max_power_len}} MW")
+
+
 def centrale_rank(city_centrale, combustible, installed_power):
-    max_city_len = max(len(city) for city in city_centrale) + 2  
+    max_city_len = max(len(city) for city in city_centrale) + 2  # Ajouter un peu d'espace pour l'esthétique
     max_comb_len = max(len(comb) for comb in combustible) + 2
     max_power_len = len(str(max(installed_power))) + 2
     print(f"{'Rang':<5}{'Centrale':<{max_city_len}}{'Combustible utilisé':<{max_comb_len}}{'Puissance installée (MW)':<{max_power_len}}")
-    print("-" * (5 + max_city_len + max_comb_len + max_power_len))  
+    print("-" * (5 + max_city_len + max_comb_len + max_power_len))  # Séparateur
     for i, (city, comb, power) in enumerate(zip(city_centrale, combustible, installed_power), 1):
-        print(f"{i:<5}{city:<{max_city_len}}{comb:<{max_comb_len}}{power:<{max_power_len}} MW")
+        if comb == "Uranium Enrichi":
+            color = BLUE
+        elif comb == "MOX":
+            color = GREEN
+        else:
+            color = RESET        
+        print(f"{RESET}{i:<5}{color}{city:<{max_city_len}}{comb:<{max_comb_len}}{power:<{max_power_len}} MW")
+
 
 
 def plot(years_nuclear, produced_energy_nuclear, years_hydraulic, produced_energy_hydraulic, years_thermical, produced_energy_thermical):
