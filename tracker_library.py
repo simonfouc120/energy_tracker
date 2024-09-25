@@ -88,8 +88,9 @@ def load_array(file): ### A MODIF
         array_energy_consumption = np.array(df_energy_consumption)
         years_cunsomption = array_energy_consumption[1:,0]
         energy_consumption = array_energy_consumption[1:,6]
-        # print(years_cunsomption)
-        # print(energy_consumption)
+        gaz_consumption = array_energy_consumption[1:,5]
+        return years_cunsomption, energy_consumption, gaz_consumption
+
 
 def centrale_rank(city_centrale, combustible, installed_power):
     max_city_len = max(len(city) for city in city_centrale) + 5  # Ajouter un peu d'espace pour l'esthétique
