@@ -29,6 +29,9 @@ def load_data(file) :
     if file == "centrale_nuclear" :
         df_nuclear_centrales = pd.read_csv("data/centrales-de-production-nucleaire-edf.csv", sep=";", encoding='ISO-8859-1')  # Source : EDF
         return df_nuclear_centrales
+    if file == "energy_consumption" :
+        df_energy_consumption = pd.read_csv("data/consommation-annuelle-brute.csv", sep=";", encoding='ISO-8859-1')  # Source : RTE
+        return df_energy_consumption
 
 def load_array(file): ### A MODIF
     if file == "various_energy_produced" : 
@@ -80,6 +83,13 @@ def load_array(file): ### A MODIF
         sorted_installed_power = installed_power[np.argsort(-installed_power)]
         ### Ajout combustible
         return sorted_city_centrale, sorted_combustible, sorted_installed_power
+    if file == "energy_consumption" : 
+        df_energy_consumption = load_data("energy_consumption")
+        array_energy_consumption = np.array(df_energy_consumption)
+        years_cunsomption = array_energy_consumption[1:,0]
+        energy_consumption = array_energy_consumption[1:,6]
+        # print(years_cunsomption)
+        # print(energy_consumption)
 
 def centrale_rank(city_centrale, combustible, installed_power):
     max_city_len = max(len(city) for city in city_centrale) + 5  # Ajouter un peu d'espace pour l'esthétique
