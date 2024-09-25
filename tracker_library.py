@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 # Codes couleurs ANSI
 BLUE = '\033[94m'
 GREEN = '\033[92m'
+RED = '\033[91m'
 RESET = '\033[0m'
 
 # Constant
@@ -87,7 +88,7 @@ def centrale_rank(city_centrale, combustible, installed_power):
             color = RESET        
         print(f"{RESET}{i:<5}{color}{city:<{max_city_len}}{comb:<{max_comb_len}}{power:<{max_power_len}} MW")
 
-def plot(years_nuclear, produced_energy_nuclear, years_hydraulic, produced_energy_hydraulic, years_thermical, produced_energy_thermical):
+def plot_energy_production_and_co2(years_nuclear, produced_energy_nuclear, years_hydraulic, produced_energy_hydraulic, years_thermical, produced_energy_thermical):
     plt.figure("Various energy production vs years")
     plt.plot(years_nuclear, produced_energy_nuclear, marker='x', label = " nuclear")
     plt.plot(years_hydraulic, produced_energy_hydraulic, marker='x', label = "hydraulic")
@@ -116,7 +117,11 @@ def proportion_combustible(combustible, installed_power):
     total_power = np.sum(installed_power)
     prop_235U = np.sum(installed_power[combustible == "235U"]) / total_power
     prop_MOX = np.sum(installed_power[combustible == "MOX"]) / total_power
-    print(f"Proportion de la puissance installée en 235U : {prop_235U:.2%}")
-    print(f"Proportion de la puissance installée en MOX : {prop_MOX:.2%}")
-    
+    print(f"{RESET}Proportion de la puissance installée en 235U : {RED}{prop_235U:.2%}")
+    print(f"{RESET}Proportion de la puissance installée en MOX : {RED}{prop_MOX:.2%}")
+    # AJout de la proportion des centrales avec des combustibles en 235U et MOX
+    prop_235U_count = np.sum(combustible == "235U") / len(combustible)
+    prop_MOX_count = np.sum(combustible == "MOX") / len(combustible)
+    print(f"{RESET}Proportion des centrales avec du combustible 235U : {RED}{prop_235U_count:.2%}")
+    print(f"{RESET}Proportion des centrales avec du combustible MOX : {RED}{prop_MOX_count:.2%}")
     
